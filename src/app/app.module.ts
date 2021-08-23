@@ -8,17 +8,9 @@ import { AppHeaderComponent } from './header/header.component';
 import { AngularMaterialModule } from './angular-material/angular-material.module';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    AppHeaderComponent,
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    AngularMaterialModule,
-  ],
+  declarations: [AppComponent, AppHeaderComponent],
+  imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, AngularMaterialModule],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
