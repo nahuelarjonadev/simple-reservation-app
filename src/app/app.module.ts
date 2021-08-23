@@ -6,9 +6,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { AngularMaterialModule } from './angular-material/angular-material.module';
 import { AppComponent } from './app.component';
 import { AppHeaderComponent } from './header/header.component';
+import { RoomSelectorComponent } from './make-reservation/room-selector/room-selector.component';
 
 @NgModule({
-  declarations: [AppComponent, AppHeaderComponent],
+  declarations: [AppComponent, AppHeaderComponent, RoomSelectorComponent],
   imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, AngularMaterialModule],
   providers: [],
   bootstrap: [AppComponent],
