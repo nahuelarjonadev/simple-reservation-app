@@ -13,4 +13,20 @@ describe('MakeReservationService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('should have a getAvailableRooms method', () => {
+    expect(service.getAvailableRooms).toBeTruthy();
+  });
+
+  it('should have a non-empty Available Rooms property', () => {
+    const rooms = service.getAvailableRooms();
+    expect(rooms.length).toBeGreaterThan(0);
+  });
+
+  it('getAvailableRooms should not return a reference', () => {
+    const rooms1 = service.getAvailableRooms();
+    const rooms2 = service.getAvailableRooms();
+
+    expect(rooms1 === rooms2).toBeFalsy();
+  });
 });
