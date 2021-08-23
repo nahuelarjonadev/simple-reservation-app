@@ -7,9 +7,10 @@ import { AngularMaterialModule } from './angular-material/angular-material.modul
 import { AppComponent } from './app.component';
 import { AppHeaderComponent } from './header/header.component';
 import { RoomSelectorComponent } from './make-reservation/room-selector/room-selector.component';
+import { DateSelectorComponent } from './make-reservation/room-selector/date-selector/date-selector.component';
 
 @NgModule({
-  declarations: [AppComponent, AppHeaderComponent, RoomSelectorComponent],
+  declarations: [AppComponent, AppHeaderComponent, RoomSelectorComponent, DateSelectorComponent],
   imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, AngularMaterialModule],
   providers: [],
   bootstrap: [AppComponent],
