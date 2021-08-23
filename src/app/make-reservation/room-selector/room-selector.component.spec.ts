@@ -1,12 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { OverlayContainer } from '@angular/cdk/overlay';
+
 import { MakeReservationService } from '../make-reservation.service';
 
 import { RoomSelectorComponent } from './room-selector.component';
 
 const makeReservationServiceStub: Pick<MakeReservationService, keyof MakeReservationService> = {
   getAvailableRooms() {
-    return ['1', '2'];
+    return ['room1', 'room2'];
   },
 };
 
@@ -18,6 +23,7 @@ describe('RoomSelectorComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [RoomSelectorComponent],
+      imports: [MatSelectModule, MatOptionModule, NoopAnimationsModule],
       providers: [{ provide: MakeReservationService, useValue: makeReservationServiceStub }],
     }).compileComponents();
 
@@ -37,28 +43,50 @@ describe('RoomSelectorComponent', () => {
     expect(matSelect).toBeTruthy();
   });
 
-  it('mat-select should create a mat-option for each available room', () => {
-    const matOptions = fixture.debugElement.queryAll(By.css('mat-option'));
-    const availableRooms = makeReservationService.getAvailableRooms();
-
-    expect(matOptions.length === availableRooms.length).toBeTrue();
+  it('getAvailableRooms should return the same rooms as the service', () => {
+    const availableRooms = component.getAvailableRooms();
+    const availableRoomsService = makeReservationService.getAvailableRooms();
+    expect(availableRooms.toString() === availableRoomsService.toString()).toBeTrue();
   });
 
-  it('each mat-option value should match content of corresponding available rooms', () => {
-    const matOptions = fixture.debugElement.queryAll(By.css('mat-option'));
-    const availableRooms = makeReservationService.getAvailableRooms();
+  it('mat-select should create a mat-option for each available room', async () => {
+    const matSelect = fixture.debugElement.query(By.css('.mat-select-trigger')).nativeElement;
+    matSelect.click();
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      // options will be rendered inside OverlayContainer
+      const overlay = TestBed.inject(OverlayContainer).getContainerElement();
 
-    let allOptionsMatchTheirRoom = true;
-    for (let i = 0; i < availableRooms.length; i++) {
-      const matOptionValue: string = matOptions[i].nativeElement.value;
-      const roomValue: string = availableRooms[i];
+      const matOptions = overlay.querySelectorAll<HTMLElement>('mat-option');
+      const availableRooms = makeReservationService.getAvailableRooms();
 
-      if (matOptionValue !== roomValue) {
-        allOptionsMatchTheirRoom = false;
-        break;
+      expect(matOptions.length === availableRooms.length).toBeTrue();
+    });
+  });
+
+  it('each mat-option value should match content of corresponding available rooms', async () => {
+    const matSelect = fixture.debugElement.query(By.css('.mat-select-trigger')).nativeElement;
+    matSelect.click();
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      // options will be rendered inside OverlayContainer
+      const overlay = TestBed.inject(OverlayContainer).getContainerElement();
+
+      const matOptions = overlay.querySelectorAll<HTMLElement>('mat-option');
+      const availableRooms = makeReservationService.getAvailableRooms();
+
+      let allOptionsMatchTheirRoom = true;
+      for (let i = 0; i < availableRooms.length; i++) {
+        const matOptionValue: string = matOptions[i].innerText;
+        const roomValue: string = availableRooms[i];
+
+        if (matOptionValue !== roomValue) {
+          allOptionsMatchTheirRoom = false;
+          break;
+        }
       }
-    }
 
-    expect(allOptionsMatchTheirRoom).toBeTrue();
+      expect(allOptionsMatchTheirRoom).toBeTrue();
+    });
   });
 });
