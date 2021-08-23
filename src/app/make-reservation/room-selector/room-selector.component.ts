@@ -8,6 +8,12 @@ import { Component, OnInit } from '@angular/core';
 export class RoomSelectorComponent implements OnInit {
   constructor() {}
 
+  private availableRooms: string[] = ['1', '2'];
+
+  getAvailableRooms(): string[] {
+    return [...this.availableRooms];
+  }
+
   ngOnInit(): void {
     return;
   }
