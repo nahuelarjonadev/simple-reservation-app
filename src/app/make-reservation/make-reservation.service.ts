@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 export class MakeReservationService {
   constructor() {}
 
-  private availableRooms: string[] = ['1', '2', '3'];
+  private availableRooms: string[] = ['room1', 'room2', 'room3'];
 
   getAvailableRooms(): string[] {
     return [...this.availableRooms];
