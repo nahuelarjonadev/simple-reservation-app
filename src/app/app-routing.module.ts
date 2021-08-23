@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { RoomSelectorComponent } from './make-reservation/room-selector/room-selector.component';
+import { MakeReservationComponent } from './make-reservation/make-reservation.component';
 
-const routes: Routes = [{ path: '', component: RoomSelectorComponent }];
+const routes: Routes = [{ path: '', component: MakeReservationComponent }];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { enableTracing: true })],
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}
