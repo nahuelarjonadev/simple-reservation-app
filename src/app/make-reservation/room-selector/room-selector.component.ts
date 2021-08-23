@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MakeReservationService } from '../make-reservation.service';
 
 @Component({
   selector: 'app-room-selector',
@@ -6,12 +7,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./room-selector.component.sass'],
 })
 export class RoomSelectorComponent implements OnInit {
-  constructor() {}
-
-  private availableRooms: string[] = ['1', '2'];
+  constructor(private makeReservationService: MakeReservationService) {}
 
   getAvailableRooms(): string[] {
-    return [...this.availableRooms];
+    return this.makeReservationService.getAvailableRooms();
   }
 
   ngOnInit(): void {
