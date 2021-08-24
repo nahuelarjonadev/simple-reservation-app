@@ -67,6 +67,7 @@ export class MakeReservationService {
 
   setSelectedRoom(room: string) {
     if (this.selectedRoom === room) return;
+    if (room !== '' && !this.availableRooms.includes(room)) return;
 
     this.selectedRoom = room;
     this.onRoomSelected.next(this.selectedRoom);
