@@ -46,12 +46,6 @@ export class TimeSelectorComponent implements OnInit {
       this.matList.options.forEach((...[option]) => {
         if (option.value === timeSlot && !option.selected) option.toggle();
       });
-
-      const a = this.makeReservationService;
-
-      console.log(
-        'final selection: ' + a.getSelectedRoom() + ' ' + a.getSelectedDate() + ' ' + a.getSelectedTimeSlot()
-      );
     });
   }
 }
