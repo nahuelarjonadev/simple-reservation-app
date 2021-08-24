@@ -8,6 +8,7 @@ export class MakeReservationService {
   constructor() {}
 
   private availableRooms: string[] = ['room1', 'room2', 'room3'];
+  private selectedRoom: string = '';
   private availableRoomDates: { [Room: string]: RoomDates } = {
     room1: {
       2021: {
@@ -36,6 +37,14 @@ export class MakeReservationService {
 
   getAvailableRooms(): string[] {
     return [...this.availableRooms];
+  }
+
+  getSelectedRoom(): string {
+    return this.selectedRoom;
+  }
+
+  setSelectedRoom(room: string) {
+    this.selectedRoom = room;
   }
 
   getAvailableDatesForRoom = (room: string): RoomDates => {
