@@ -150,9 +150,9 @@ export class MakeReservationService {
 
   private makeReservationDate(date: Date): ReservationDate {
     return {
-      year: this.selectedDate.getFullYear(),
-      month: this.selectedDate.getMonth() + 1,
-      day: this.selectedDate.getDate(),
+      year: date.getFullYear(),
+      month: date.getMonth() + 1,
+      day: date.getDate(),
     };
   }
 
