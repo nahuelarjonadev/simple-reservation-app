@@ -13,6 +13,8 @@ const makeReservationServiceStub: Partial<MakeReservationService> = {
   getAvailableRooms() {
     return ['room1', 'room2'];
   },
+
+  setSelectedRoom(room: string) {},
 };
 
 describe('RoomSelectorComponent', () => {
@@ -81,6 +83,24 @@ describe('RoomSelectorComponent', () => {
       );
 
       expect(allOptionsMatchTheirRoom).toBeTrue();
+    });
+  });
+
+  it('should call setSelectedRoom when an option is chosen', async () => {
+    let spy = spyOn(makeReservationService, 'setSelectedRoom');
+    const matSelect = fixture.debugElement.query(By.css('.mat-select-trigger')).nativeElement;
+    matSelect.click();
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      // options will be rendered inside OverlayContainer
+      const overlay = TestBed.inject(OverlayContainer).getContainerElement();
+
+      const matOption = overlay.querySelector<HTMLElement>('mat-option');
+      const room = matOption?.innerText;
+      matOption?.click();
+      fixture.detectChanges();
+
+      expect(spy).toHaveBeenCalledOnceWith(room || '');
     });
   });
 });
