@@ -9,9 +9,11 @@ export class MakeReservationService {
   constructor() {}
 
   private onRoomSelected = new Subject<string>();
+  private onDateSelected = new Subject<Date>();
 
   private availableRooms: string[] = ['room1', 'room2', 'room3'];
   private selectedRoom: string = '';
+  private selectedDate: Date = new Date();
   private availableRoomDates: { [Room: string]: RoomDates } = {
     room1: {
       2021: {
@@ -42,6 +44,10 @@ export class MakeReservationService {
     return this.onRoomSelected.asObservable();
   }
 
+  getOnDateSelectedListener() {
+    return this.onDateSelected.asObservable();
+  }
+
   getAvailableRooms(): string[] {
     return [...this.availableRooms];
   }
@@ -53,6 +59,30 @@ export class MakeReservationService {
   setSelectedRoom(room: string) {
     this.selectedRoom = room;
     this.onRoomSelected.next(this.selectedRoom);
+  }
+
+  getSelectedDate(): Date {
+    return this.selectedDate;
+  }
+
+  setSelectedDate(date: Date) {
+    this.selectedDate = date;
+    this.onDateSelected.next(this.selectedDate);
+  }
+
+  getTimeSlotsForCurrentSelection(): string[] {
+    return this.getTimeSlots(this.selectedRoom, this.selectedDate);
+  }
+
+  getTimeSlots(room: string, date: Date): string[] {
+    const roomDates = this.availableRoomDates[room];
+    if (roomDates === undefined) return [];
+
+    const year = roomDates[date.getFullYear()];
+    const month = year ? year[date.getMonth() + 1] : false;
+    const dayTimeSlots = month ? month[date.getDate()] : [];
+
+    return dayTimeSlots || [];
   }
 
   getAvailableDatesForRoom = (room: string): RoomDates => {
