@@ -14,19 +14,34 @@ describe('MakeReservationService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should have a getAvailableRooms method', () => {
-    expect(service.getAvailableRooms).toBeTruthy();
+  describe('getAvailableRooms method', () => {
+    it('should be a member', () => {
+      expect(service.getAvailableRooms).toBeTruthy();
+    });
+
+    it('should return a non-empty array', () => {
+      const rooms = service.getAvailableRooms();
+      expect(rooms.length).toBeGreaterThan(0);
+    });
+
+    it('should not return a reference', () => {
+      const rooms1 = service.getAvailableRooms();
+      const rooms2 = service.getAvailableRooms();
+
+      expect(rooms1 === rooms2).toBeFalsy();
+    });
   });
 
-  it('should have a non-empty Available Rooms property', () => {
-    const rooms = service.getAvailableRooms();
-    expect(rooms.length).toBeGreaterThan(0);
-  });
+  describe('getAvailableDatesForRoom method', () => {
+    it('should be a member', () => {
+      expect(service.getAvailableDatesForRoom).toBeTruthy();
+    });
 
-  it('getAvailableRooms should not return a reference', () => {
-    const rooms1 = service.getAvailableRooms();
-    const rooms2 = service.getAvailableRooms();
-
-    expect(rooms1 === rooms2).toBeFalsy();
+    it('should not return a reference', () => {
+      const room = service.getAvailableRooms()[0];
+      const dates1 = service.getAvailableDatesForRoom(room);
+      const dates2 = service.getAvailableDatesForRoom(room);
+      expect(dates1 === dates2).toBeFalsy();
+    });
   });
 });
