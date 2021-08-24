@@ -1,4 +1,6 @@
+import { ViewChild } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
+import { MatCalendar } from '@angular/material/datepicker';
 
 import { MakeReservationService } from '../make-reservation.service';
 import { RoomDates } from '../room-dates.model';
@@ -12,10 +14,20 @@ export class DateSelectorComponent implements OnInit {
   constructor(private makeReservationService: MakeReservationService) {}
 
   private currentRoomDates: RoomDates = {};
+  public selectedDate!: Date | null;
+
+  @ViewChild(MatCalendar)
+  calendar!: MatCalendar<Date>;
 
   ngOnInit(): void {
     const selectedRoom = this.makeReservationService.getSelectedRoom();
     this.currentRoomDates = this.makeReservationService.getAvailableDatesForRoom(selectedRoom);
+
+    this.makeReservationService.getOnRoomSelectedListener().subscribe((room: string) => {
+      this.currentRoomDates = this.makeReservationService.getAvailableDatesForRoom(room);
+      console.log(this.currentRoomDates);
+      this.calendar.updateTodaysDate();
+    });
   }
 
   getAvailableDatesForRoom = (d: Date | null): boolean => {
