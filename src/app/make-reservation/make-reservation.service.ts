@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { RoomDates } from './room-dates.model';
+import { Reservation, ReservationDate, RoomDates } from './room-dates.model';
 import { Subject } from 'rxjs';
 import * as moment from 'moment';
 
@@ -42,6 +42,8 @@ export class MakeReservationService {
     },
     room3: {},
   };
+
+  private savedReservations: Reservation[] = [];
 
   getOnRoomSelectedListener() {
     return this.onRoomSelected.asObservable();
@@ -144,4 +146,55 @@ export class MakeReservationService {
   getAvailableDatesForRoom = (room: string): RoomDates => {
     return this.availableRoomDates[room] ? JSON.parse(JSON.stringify(this.availableRoomDates[room])) : {};
   };
+
+  private makeReservationDate(date: Date): ReservationDate {
+    return {
+      year: this.selectedDate.getFullYear(),
+      month: this.selectedDate.getMonth() + 1,
+      day: this.selectedDate.getDate(),
+    };
+  }
+
+  private fromReservationDateToDate(reservationDate: ReservationDate): Date {
+    const date = new Date();
+    date.setFullYear(reservationDate.year);
+    date.setMonth(reservationDate.month - 1);
+    date.setDate(reservationDate.day);
+
+    return date;
+  }
+
+  private validateReservation(reservation: Reservation): boolean {
+    const validRoom: boolean = this.availableRooms.includes(reservation.room);
+    if (!validRoom) return false;
+
+    const date = this.fromReservationDateToDate(reservation.date);
+    const timeSlots: string[] = this.getTimeSlots(reservation.room, date);
+    const validTimeSlot = timeSlots.includes(reservation.timeSlot);
+
+    return validTimeSlot;
+  }
+
+  saveReservation() {
+    const reservationDate: ReservationDate = this.makeReservationDate(this.selectedDate);
+    const reservation: Reservation = {
+      room: this.selectedRoom,
+      date: reservationDate,
+      timeSlot: this.selectedTimeSlot,
+    };
+
+    const isValid = this.validateReservation(reservation);
+    if (isValid) {
+      this.savedReservations.push(reservation);
+      const timeSlots =
+        this.availableRoomDates[reservation.room][reservation.date.year][reservation.date.month][reservation.date.day];
+      const timeSlotIndex = timeSlots.indexOf(reservation.timeSlot);
+      timeSlots.splice(timeSlotIndex, 1);
+      console.log(this.savedReservations);
+
+      this.setSelectedRoom('');
+    } else {
+      console.log('ERROR: reservation failed validation');
+    }
+  }
 }
