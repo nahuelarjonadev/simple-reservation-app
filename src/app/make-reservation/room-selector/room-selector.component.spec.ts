@@ -79,16 +79,10 @@ describe('RoomSelectorComponent', () => {
       const matOptions = overlay.querySelectorAll<HTMLElement>('mat-option');
       const availableRooms = makeReservationService.getAvailableRooms();
 
-      let allOptionsMatchTheirRoom = true;
-      for (let i = 0; i < availableRooms.length; i++) {
-        const matOptionValue: string = matOptions[i].innerText;
-        const roomValue: string = availableRooms[i];
-
-        if (matOptionValue !== roomValue) {
-          allOptionsMatchTheirRoom = false;
-          break;
-        }
-      }
+      const allOptionsMatchTheirRoom = availableRooms.reduce(
+        (...[acc, room, i]) => acc && matOptions[i].innerText === room,
+        true
+      );
 
       expect(allOptionsMatchTheirRoom).toBeTrue();
     });
