@@ -17,6 +17,9 @@ export class DateSelectorComponent implements OnInit {
 
   ngOnInit(): void {
     this.makeReservationService.getOnRoomSelectedListener().subscribe(() => {
+      const today = new Date();
+      this.makeReservationService.setSelectedDate(today);
+      this.calendar.selected = today;
       this.calendar.updateTodaysDate();
     });
 
