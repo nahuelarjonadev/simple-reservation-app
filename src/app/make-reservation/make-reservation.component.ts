@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MakeReservationService } from './make-reservation.service';
 
 @Component({
   selector: 'app-make-reservation',
@@ -6,7 +7,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./make-reservation.component.sass'],
 })
 export class MakeReservationComponent implements OnInit {
-  constructor() {}
+  constructor(private makeReservationService: MakeReservationService) {}
+
+  makeReservation() {
+    this.makeReservationService.saveReservation();
+  }
 
   ngOnInit(): void {
     return;
