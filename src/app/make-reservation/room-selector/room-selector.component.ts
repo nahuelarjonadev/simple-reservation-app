@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatSelect } from '@angular/material/select';
 import { MakeReservationService } from '../make-reservation.service';
 
 @Component({
@@ -9,6 +10,9 @@ import { MakeReservationService } from '../make-reservation.service';
 export class RoomSelectorComponent implements OnInit {
   constructor(private makeReservationService: MakeReservationService) {}
 
+  @ViewChild(MatSelect)
+  matSelect!: MatSelect;
+
   getAvailableRooms(): string[] {
     return this.makeReservationService.getAvailableRooms();
   }
@@ -18,6 +22,8 @@ export class RoomSelectorComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    return;
+    this.makeReservationService.getOnRoomSelectedListener().subscribe((room: string) => {
+      this.matSelect.writeValue(room);
+    });
   }
 }
