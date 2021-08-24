@@ -13,6 +13,10 @@ export class RoomSelectorComponent implements OnInit {
     return this.makeReservationService.getAvailableRooms();
   }
 
+  setSelectedRoom(room: string) {
+    this.makeReservationService.setSelectedRoom(room);
+  }
+
   ngOnInit(): void {
     return;
   }
