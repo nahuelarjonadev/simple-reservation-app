@@ -175,6 +175,15 @@ export class MakeReservationService {
     return validTimeSlot;
   }
 
+  isReadyToMakeReservation(): boolean {
+    const reservationDate = this.makeReservationDate(this.selectedDate);
+    return this.validateReservation({
+      room: this.selectedRoom,
+      date: reservationDate,
+      timeSlot: this.selectedTimeSlot,
+    });
+  }
+
   saveReservation() {
     const reservationDate: ReservationDate = this.makeReservationDate(this.selectedDate);
     const reservation: Reservation = {
