@@ -4,7 +4,7 @@ import { MatCalendar } from '@angular/material/datepicker';
 
 import { MakeReservationService } from '../make-reservation.service';
 
-/** Component that renders a calendar from which the user picks a date for the reservation
+/** Renders a calendar from which the user picks a date for the reservation
  * Dates will be enabled or disabled based on if they have any available time slots to reserve
  */
 @Component({
