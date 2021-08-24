@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Reservation, ReservationDate, RoomDates } from './room-dates.model';
+import { Reservation, ReservationDate, RoomDates } from './reservation.model';
 import { Subject } from 'rxjs';
 import * as moment from 'moment';
 
@@ -190,6 +190,7 @@ export class MakeReservationService {
         this.availableRoomDates[reservation.room][reservation.date.year][reservation.date.month][reservation.date.day];
       const timeSlotIndex = timeSlots.indexOf(reservation.timeSlot);
       timeSlots.splice(timeSlotIndex, 1);
+      console.log('Reservation Succeeded!');
       console.log(this.savedReservations);
 
       this.setSelectedRoom('');
