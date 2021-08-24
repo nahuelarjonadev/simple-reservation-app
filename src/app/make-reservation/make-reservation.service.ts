@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { RoomDates } from './room-dates.model';
 import { Subject } from 'rxjs';
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root',
@@ -69,6 +70,37 @@ export class MakeReservationService {
     this.selectedDate = date;
     this.onDateSelected.next(this.selectedDate);
   }
+
+  generateBaseTimeSlots = (() => {
+    const timeSlots: string[] = [];
+
+    let lambda = () => {
+      console.log('run!');
+      if (timeSlots.length > 0) return timeSlots;
+
+      const generateBetweenTimes = (startTime: moment.Moment, endTime: moment.Moment) => {
+        while (startTime <= endTime) {
+          const newTime: string = moment(startTime).format('HH:mm');
+          timeSlots.push(newTime);
+          startTime.add(30, 'minutes');
+        }
+      };
+
+      let startTime: moment.Moment = moment().utc().set({ hour: 9, minute: 0 });
+      let endTime: moment.Moment = moment().utc().set({ hour: 12, minute: 30 });
+      generateBetweenTimes(startTime, endTime);
+
+      startTime.set({ hour: 16, minute: 0 });
+      endTime.set({ hour: 19, minute: 30 });
+      generateBetweenTimes(startTime, endTime);
+
+      console.log('generated');
+
+      return timeSlots;
+    };
+
+    return lambda;
+  })();
 
   getTimeSlotsForCurrentSelection(): string[] {
     return this.getTimeSlots(this.selectedRoom, this.selectedDate);
