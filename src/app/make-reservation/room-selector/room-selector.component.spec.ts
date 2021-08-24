@@ -13,6 +13,10 @@ const makeReservationServiceStub: Pick<MakeReservationService, keyof MakeReserva
   getAvailableRooms() {
     return ['room1', 'room2'];
   },
+
+  getAvailableDatesForRoom() {
+    return {};
+  },
 };
 
 describe('RoomSelectorComponent', () => {
