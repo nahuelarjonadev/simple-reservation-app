@@ -57,6 +57,48 @@ describe('MakeReservationService', () => {
     );
   });
 
+  describe('getSelectedDate and setSelectedDate methods', () => {
+    it('should return the selected room after setting it', () => {
+      const date = new Date();
+      service.setSelectedDate(date);
+      expect(service.getSelectedDate()).toEqual(date);
+    });
+
+    it(
+      'should emit onSelectedDate after setting a date',
+      waitForAsync(() => {
+        let onDateSelected = service.getOnDateSelectedListener();
+        const dateToSelect = new Date();
+        onDateSelected.subscribe((date: Date) => {
+          expect(date).toEqual(date);
+        });
+
+        service.setSelectedDate(dateToSelect);
+      })
+    );
+  });
+
+  describe('getTimeSlots', () => {
+    it('should return [] if room not found', () => {
+      const date = new Date();
+      service.setSelectedDate(date);
+      expect(service.getTimeSlots('', new Date())).toEqual([]);
+    });
+
+    it(
+      'should emit onSelectedDate after setting a date',
+      waitForAsync(() => {
+        let onDateSelected = service.getOnDateSelectedListener();
+        const dateToSelect = new Date();
+        onDateSelected.subscribe((date: Date) => {
+          expect(date).toEqual(date);
+        });
+
+        service.setSelectedDate(dateToSelect);
+      })
+    );
+  });
+
   describe('getAvailableDatesForRoom method', () => {
     it('should not return a reference', () => {
       const room = service.getAvailableRooms()[0];
