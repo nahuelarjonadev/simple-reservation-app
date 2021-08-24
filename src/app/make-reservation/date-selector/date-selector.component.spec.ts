@@ -1,11 +1,12 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-
-import { DateSelectorComponent } from './date-selector.component';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+
+import { DateSelectorComponent } from './date-selector.component';
 
 describe('DateSelectorComponent', () => {
   let component: DateSelectorComponent;
@@ -14,7 +15,7 @@ describe('DateSelectorComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [DateSelectorComponent],
-      imports: [MatDatepickerModule, MatInputModule, MatNativeDateModule, NoopAnimationsModule],
+      imports: [MatDatepickerModule, MatInputModule, MatNativeDateModule, NoopAnimationsModule, MatCardModule],
     }).compileComponents();
   });
 
@@ -29,7 +30,7 @@ describe('DateSelectorComponent', () => {
   });
 
   it('should contain a mat-datepicker', () => {
-    const matDatepicker = fixture.debugElement.query(By.css('mat-datepicker'));
+    const matDatepicker = fixture.debugElement.query(By.css('mat-calendar'));
     expect(matDatepicker).toBeTruthy();
   });
 });
