@@ -10,7 +10,7 @@ export class MakeReservationComponent implements OnInit {
   constructor(private makeReservationService: MakeReservationService) {}
 
   canMakeReservation(): boolean {
-    return true;
+    return this.makeReservationService.isReadyToMakeReservation();
   }
 
   makeReservation() {
