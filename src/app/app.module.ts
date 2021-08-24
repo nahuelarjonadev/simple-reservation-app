@@ -9,6 +9,7 @@ import { AppHeaderComponent } from './header/header.component';
 import { RoomSelectorComponent } from './make-reservation/room-selector/room-selector.component';
 import { DateSelectorComponent } from './make-reservation/date-selector/date-selector.component';
 import { MakeReservationComponent } from './make-reservation/make-reservation.component';
+import { TimeSelectorComponent } from './make-reservation/time-selector/time-selector.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { MakeReservationComponent } from './make-reservation/make-reservation.co
     RoomSelectorComponent,
     DateSelectorComponent,
     MakeReservationComponent,
+    TimeSelectorComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, AngularMaterialModule],
   providers: [],
