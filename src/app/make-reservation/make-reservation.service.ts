@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { RoomDates } from './room-dates.model';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MakeReservationService {
   constructor() {}
+
+  private onRoomSelected = new Subject<string>();
 
   private availableRooms: string[] = ['room1', 'room2', 'room3'];
   private selectedRoom: string = '';
@@ -35,6 +38,10 @@ export class MakeReservationService {
     room3: {},
   };
 
+  getOnRoomSelectedListener() {
+    return this.onRoomSelected.asObservable();
+  }
+
   getAvailableRooms(): string[] {
     return [...this.availableRooms];
   }
@@ -45,6 +52,7 @@ export class MakeReservationService {
 
   setSelectedRoom(room: string) {
     this.selectedRoom = room;
+    this.onRoomSelected.next(this.selectedRoom);
   }
 
   getAvailableDatesForRoom = (room: string): RoomDates => {
