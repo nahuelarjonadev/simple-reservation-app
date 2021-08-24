@@ -9,6 +9,10 @@ import { MakeReservationService } from './make-reservation.service';
 export class MakeReservationComponent implements OnInit {
   constructor(private makeReservationService: MakeReservationService) {}
 
+  canMakeReservation(): boolean {
+    return true;
+  }
+
   makeReservation() {
     this.makeReservationService.saveReservation();
   }
