@@ -32,6 +32,18 @@ describe('MakeReservationService', () => {
     });
   });
 
+  describe('getSelectedRoom and setSelectedRoom methods', () => {
+    it('should return an empty room when initialized', () => {
+      expect(service.getSelectedRoom()).toEqual('');
+    });
+
+    it('should return the selected room after setting it', () => {
+      const room = 'testRoom';
+      service.setSelectedRoom(room);
+      expect(service.getSelectedRoom()).toEqual(room);
+    });
+  });
+
   describe('getAvailableDatesForRoom method', () => {
     it('should be a member', () => {
       expect(service.getAvailableDatesForRoom).toBeTruthy();
