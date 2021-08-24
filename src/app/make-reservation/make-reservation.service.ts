@@ -58,6 +58,8 @@ export class MakeReservationService {
   }
 
   setSelectedRoom(room: string) {
+    if (this.selectedRoom === room) return;
+
     this.selectedRoom = room;
     this.onRoomSelected.next(this.selectedRoom);
   }
@@ -67,6 +69,14 @@ export class MakeReservationService {
   }
 
   setSelectedDate(date: Date) {
+    if (
+      this.selectedDate.getFullYear() === date.getFullYear() &&
+      this.selectedDate.getMonth() === date.getMonth() &&
+      this.selectedDate.getDate() === date.getDate()
+    ) {
+      return;
+    }
+
     this.selectedDate = date;
     this.onDateSelected.next(this.selectedDate);
   }
