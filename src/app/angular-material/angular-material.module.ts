@@ -21,4 +21,5 @@ import { MatButtonModule } from '@angular/material/button';
     MatButtonModule,
   ],
 })
+/** This module's purpose is to avoid having to import material modules in multiple places */
 export class AngularMaterialModule {}

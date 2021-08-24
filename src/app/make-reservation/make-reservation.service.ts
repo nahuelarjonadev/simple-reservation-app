@@ -3,6 +3,11 @@ import { Reservation, ReservationDate, RoomDates } from './reservation.model';
 import { Subject } from 'rxjs';
 import * as moment from 'moment';
 
+/**
+ * Main service for making reservations
+ * In a real app this service would talk to the server using observables and what not
+ * For the sake of this demo, I've kept a fake private state here instead
+ */
 @Injectable({
   providedIn: 'root',
 })
@@ -13,10 +18,14 @@ export class MakeReservationService {
   private onDateSelected = new Subject<Date>();
   private onTimeSlotSelected = new Subject<string>();
 
+  /** Rooms the user can choose from */
   private availableRooms: string[] = ['room1', 'room2', 'room3'];
+
   private selectedRoom: string = '';
   private selectedDate: Date = new Date();
   private selectedTimeSlot: string = '';
+
+  /** Fake data to simulate what the server would return when asked about all available room slots */
   private availableRoomDates: { [Room: string]: RoomDates } = {
     room1: {
       2021: {
@@ -43,8 +52,10 @@ export class MakeReservationService {
     room3: {},
   };
 
+  /** Fake state used to store successful reservations. Reservation should have an ID, but I didn't ge to implement it */
   private savedReservations: Reservation[] = [];
 
+  // methods to return Subjects as passive observables
   getOnRoomSelectedListener() {
     return this.onRoomSelected.asObservable();
   }
@@ -65,6 +76,10 @@ export class MakeReservationService {
     return this.selectedRoom;
   }
 
+  /**
+   * Won't do anything if the same room is already selected or if the room is invalid
+   * @param room can be '' to signify deselect
+   */
   setSelectedRoom(room: string) {
     if (this.selectedRoom === room) return;
     if (room !== '' && !this.availableRooms.includes(room)) return;
@@ -77,6 +92,10 @@ export class MakeReservationService {
     return this.selectedDate;
   }
 
+  /**
+   * Won't do anything if the new date is the same already selected
+   * @param date
+   */
   setSelectedDate(date: Date) {
     if (
       this.selectedDate.getFullYear() === date.getFullYear() &&
@@ -94,6 +113,10 @@ export class MakeReservationService {
     return this.selectedTimeSlot;
   }
 
+  /**
+   * Won't do anything if the new time slot is the same already selected
+   * @param timeSlot
+   */
   setSelectedTimeSlot(timeSlot: string) {
     if (this.selectedTimeSlot === timeSlot) return;
 
@@ -101,6 +124,10 @@ export class MakeReservationService {
     this.onTimeSlotSelected.next(this.selectedTimeSlot);
   }
 
+  /**
+   * Generates an array of 30' timeslots between 9:00 and 13:00, and between 16:00 and 20:00
+   * Uses a closure as a means for memoization, given the method could get called multiple times
+   */
   generateBaseTimeSlots = (() => {
     const timeSlots: string[] = [];
 
@@ -133,6 +160,12 @@ export class MakeReservationService {
     return this.getTimeSlots(this.selectedRoom, this.selectedDate);
   }
 
+  /**
+   * Returns an array of time slots based on a given date and room
+   * @param room
+   * @param date
+   * @returns Returns [] if nothing is found or if the room is invalid
+   */
   getTimeSlots(room: string, date: Date): string[] {
     const roomDates = this.availableRoomDates[room];
     if (roomDates === undefined) return [];
@@ -145,6 +178,7 @@ export class MakeReservationService {
   }
 
   getAvailableDatesForRoom = (room: string): RoomDates => {
+    // Uses JSON conversion back and forth to return a deep copy of the object instead of a reference
     return this.availableRoomDates[room] ? JSON.parse(JSON.stringify(this.availableRoomDates[room])) : {};
   };
 
@@ -165,6 +199,11 @@ export class MakeReservationService {
     return date;
   }
 
+  /**
+   * Uses room, date, and timeSlot to check if the whole set is available
+   * @param reservation
+   * @returns true if the desired time slot exists and is available
+   */
   private validateReservation(reservation: Reservation): boolean {
     const validRoom: boolean = this.availableRooms.includes(reservation.room);
     if (!validRoom) return false;
@@ -176,6 +215,9 @@ export class MakeReservationService {
     return validTimeSlot;
   }
 
+  /**
+   * @returns true if the selected timeSlot is available on the selected room and date
+   */
   isReadyToMakeReservation(): boolean {
     const reservationDate = this.makeReservationDate(this.selectedDate);
     return this.validateReservation({
@@ -185,6 +227,10 @@ export class MakeReservationService {
     });
   }
 
+  /**
+   * Validates if a reservation is doable (this would be validated on the server) and saves it if valid (again, should be server-side)
+   * To fake the server returning a different set of available dates, I'll mutate this.availableRoomDates after a successful selection
+   */
   saveReservation() {
     const reservationDate: ReservationDate = this.makeReservationDate(this.selectedDate);
     const reservation: Reservation = {
@@ -200,6 +246,8 @@ export class MakeReservationService {
         this.availableRoomDates[reservation.room][reservation.date.year][reservation.date.month][reservation.date.day];
       const timeSlotIndex = timeSlots.indexOf(reservation.timeSlot);
       timeSlots.splice(timeSlotIndex, 1);
+
+      // I've kept this logs because there's no other way to verify that the reservations are truly being made
       console.log('Reservation Succeeded!');
       console.log(this.savedReservations);
 
