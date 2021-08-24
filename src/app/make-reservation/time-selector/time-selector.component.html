@@ -1,5 +1,5 @@
 <mat-selection-list [multiple]="false" class="time-selector">
-	<mat-list-option *ngFor="let time of timeSlots"
+	<mat-list-option *ngFor="let time of getTimeSlots()"
 		[value]="time"
 		[disabled]="!isTimeAvailable(time)"
 		style="display:inline-block; width:25%; text-align:center;">
