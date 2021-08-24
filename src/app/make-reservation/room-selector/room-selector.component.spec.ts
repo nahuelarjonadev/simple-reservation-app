@@ -9,13 +9,9 @@ import { MakeReservationService } from '../make-reservation.service';
 
 import { RoomSelectorComponent } from './room-selector.component';
 
-const makeReservationServiceStub: Pick<MakeReservationService, keyof MakeReservationService> = {
+const makeReservationServiceStub: Partial<MakeReservationService> = {
   getAvailableRooms() {
     return ['room1', 'room2'];
-  },
-
-  getAvailableDatesForRoom() {
-    return {};
   },
 };
 
