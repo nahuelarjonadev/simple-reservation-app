@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 
 import { MakeReservationService } from './make-reservation.service';
 
@@ -42,6 +42,19 @@ describe('MakeReservationService', () => {
       service.setSelectedRoom(room);
       expect(service.getSelectedRoom()).toEqual(room);
     });
+
+    it(
+      'should emit onSelectedRoom after setting a room',
+      waitForAsync(() => {
+        let onRoomSelected = service.getOnRoomSelectedListener();
+        const roomToSelect = 'room2';
+        onRoomSelected.subscribe((room: string) => {
+          expect(room).toEqual(roomToSelect);
+        });
+
+        service.setSelectedRoom(roomToSelect);
+      })
+    );
   });
 
   describe('getAvailableDatesForRoom method', () => {
