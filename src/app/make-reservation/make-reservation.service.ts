@@ -48,6 +48,6 @@ export class MakeReservationService {
   }
 
   getAvailableDatesForRoom = (room: string): RoomDates => {
-    return JSON.parse(JSON.stringify(this.availableRoomDates[room]));
+    return this.availableRoomDates[room] ? JSON.parse(JSON.stringify(this.availableRoomDates[room])) : {};
   };
 }
