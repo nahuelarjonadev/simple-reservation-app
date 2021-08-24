@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
+import { MakeReservationService } from '../make-reservation.service';
 
 @Component({
   selector: 'app-time-selector',
@@ -7,9 +8,10 @@ import * as moment from 'moment';
   styleUrls: ['./time-selector.component.sass'],
 })
 export class TimeSelectorComponent implements OnInit {
-  constructor() {}
+  constructor(private makeReservationService: MakeReservationService) {}
 
   public timeSlots: string[] = [];
+  private availableTimeSlots: string[] = [];
 
   generateTimeSlots() {
     const generateBetweenTimes = (startTime: moment.Moment, endTime: moment.Moment) => {
@@ -29,7 +31,20 @@ export class TimeSelectorComponent implements OnInit {
     generateBetweenTimes(startTime, endTime);
   }
 
+  isTimeAvailable(time: string): boolean {
+    return this.availableTimeSlots.includes(time);
+  }
+
   ngOnInit(): void {
     this.generateTimeSlots();
+    this.availableTimeSlots = this.makeReservationService.getTimeSlotsForCurrentSelection();
+
+    this.makeReservationService.getOnRoomSelectedListener().subscribe(() => {
+      this.availableTimeSlots = this.makeReservationService.getTimeSlotsForCurrentSelection();
+    });
+
+    this.makeReservationService.getOnDateSelectedListener().subscribe(() => {
+      this.availableTimeSlots = this.makeReservationService.getTimeSlotsForCurrentSelection();
+    });
   }
 }
