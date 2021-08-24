@@ -11,10 +11,12 @@ export class MakeReservationService {
 
   private onRoomSelected = new Subject<string>();
   private onDateSelected = new Subject<Date>();
+  private onTimeSlotSelected = new Subject<string>();
 
   private availableRooms: string[] = ['room1', 'room2', 'room3'];
   private selectedRoom: string = '';
   private selectedDate: Date = new Date();
+  private selectedTimeSlot: string = '';
   private availableRoomDates: { [Room: string]: RoomDates } = {
     room1: {
       2021: {
@@ -49,6 +51,10 @@ export class MakeReservationService {
     return this.onDateSelected.asObservable();
   }
 
+  getOnTimeSlotSelectedListener() {
+    return this.onTimeSlotSelected.asObservable();
+  }
+
   getAvailableRooms(): string[] {
     return [...this.availableRooms];
   }
@@ -81,11 +87,21 @@ export class MakeReservationService {
     this.onDateSelected.next(this.selectedDate);
   }
 
+  getSelectedTimeSlot(): string {
+    return this.selectedTimeSlot;
+  }
+
+  setSelectedTimeSlot(timeSlot: string) {
+    if (this.selectedTimeSlot === timeSlot) return;
+
+    this.selectedTimeSlot = timeSlot;
+    this.onTimeSlotSelected.next(this.selectedTimeSlot);
+  }
+
   generateBaseTimeSlots = (() => {
     const timeSlots: string[] = [];
 
     let lambda = () => {
-      console.log('run!');
       if (timeSlots.length > 0) return timeSlots;
 
       const generateBetweenTimes = (startTime: moment.Moment, endTime: moment.Moment) => {
@@ -103,8 +119,6 @@ export class MakeReservationService {
       startTime.set({ hour: 16, minute: 0 });
       endTime.set({ hour: 19, minute: 30 });
       generateBetweenTimes(startTime, endTime);
-
-      console.log('generated');
 
       return timeSlots;
     };
